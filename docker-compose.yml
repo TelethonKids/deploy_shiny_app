@@ -1,0 +1,52 @@
+version: "3.6"
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: tki_nginx
+    restart: on-failure
+    networks:
+      - tki-net
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+      - 443:443
+
+  influxdb:
+    image: influxdb:1.7.3-alpine
+    container_name: tki_influxdb
+    restart: always
+    volumes:
+      - ./influxdb/run_first_time.sh:/home/run_first_time.sh
+      - type: volume
+        source: shinyproxy_usage
+        target: /var/lib/influxdb
+        volume:
+          nocopy: true
+    networks:
+      - tki-net
+    ports:
+      - 8083:8083
+      - 8086:8086
+
+  shinyproxy:
+    depends_on:
+      - nginx
+      - influxdb
+    image: telethonkids/shinyproxy
+    container_name: tki_shinyproxy
+    restart: on-failure
+    networks:
+      - tki-net
+    volumes:
+      - ./shinyproxy/application.yml:/opt/shinyproxy/application.yml
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 8080:8080
+
+networks:
+  tki-net:
+    name: tki-net
+
+volumes:
+  shinyproxy_usage:
