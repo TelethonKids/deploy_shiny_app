@@ -41,8 +41,8 @@ services:
     volumes:
       - ./shinyproxy/application.yml:/opt/shinyproxy/application.yml
       - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - 8080:8080
+    expose:
+      - 8080
 
 networks:
   tki-net:

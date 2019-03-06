@@ -7,11 +7,13 @@ RUN apt-get update && apt-get install libcurl4-openssl-dev libv8-3.14-dev -y &&\
 RUN R -e "install.packages(c('shinydashboard', 'shinyjs', 'V8'))"
 
 # copy the app to the image
-COPY shinyapps /srv/shiny-server/
+COPY shinyapps /root/app
+COPY Rprofile.site /usr/local/lib/R/etc/Rprofile.site
 
 # make all app files readable (solves issue when dev in Windows, but building in Ubuntu)
-RUN chmod -R 755 /srv/shiny-server/
+RUN chmod -R 755 /root/app
+RUN chmod -R 755 /usr/local/lib/R/etc
 
 EXPOSE 3838
 
-CMD ["/usr/bin/shiny-server.sh"]
+CMD ["R", "-e", "shiny::runApp('/root/app')"]
