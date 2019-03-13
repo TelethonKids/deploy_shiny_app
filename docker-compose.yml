@@ -8,6 +8,7 @@ services:
       - tki-net
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/certs:/root/certs/
     ports:
       - 80:80
       - 443:443

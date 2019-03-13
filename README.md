@@ -3,7 +3,7 @@ Telethon Kids Institute ShinyProxy Docker Template
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-## Docker Ubuntu Server Installation/Set-up
+### Docker Ubuntu Server Installation/Set-up
 
 1.  Docker CE for Ubuntu installation:
     <https://docs.docker.com/install/linux/docker-ce/ubuntu/>
@@ -22,7 +22,7 @@ Telethon Kids Institute ShinyProxy Docker Template
     sudo chmod +x /usr/local/bin/docker-compose
     sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
-## Docker App Deployment
+### Docker App Deployment
 
 1.  Build Shiny App Docker image:
     1.  Change current directory to project folder `cd ...`
@@ -32,3 +32,16 @@ Telethon Kids Institute ShinyProxy Docker Template
     3.  `docker-compose up -d`
 3.  App is ready on port 80: in browser, go to 192.168.99.100 (windows)
     or 127.17.0.1 (Ubuntu)
+
+### HTTPS encryption
+
+HTTPS encryption is enabled by default, which will requrie SSL
+certificates to be created. SSL certificates can be generated following
+these instructions by Let’s Encrypt <https://letsencrypt.org/>
+
+The `*.crt` and `*.key` should be put into the
+`nginx/certs/example.com/` directory; change “example.com” to what is
+relevant for your site.
+
+If HTTPS encription is not required then modifications can be made to
+`nginx.conf` where indicated.
