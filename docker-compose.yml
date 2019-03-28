@@ -7,18 +7,31 @@ services:
     networks:
       - tki-net
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/certs:/root/certs/
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
     ports:
       - 80:80
       - 443:443
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    depends_on:
+      - shinyproxy
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    restart: on-failure
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   influxdb:
     image: influxdb:1.7.3-alpine
     container_name: tki_influxdb
-    restart: always
+    restart: on-failure
     volumes:
-      - ./influxdb/run_first_time.sh:/home/run_first_time.sh
+      - ./run_first_time.sh:/home/run_first_time.sh
       - type: volume
         source: shinyproxy_usage
         target: /var/lib/influxdb
@@ -32,7 +45,6 @@ services:
 
   shinyproxy:
     depends_on:
-      - nginx
       - influxdb
     image: telethonkids/shinyproxy
     container_name: tki_shinyproxy
@@ -40,7 +52,7 @@ services:
     networks:
       - tki-net
     volumes:
-      - ./shinyproxy/application.yml:/opt/shinyproxy/application.yml
+      - ./application.yml:/opt/shinyproxy/application.yml
       - /var/run/docker.sock:/var/run/docker.sock
     expose:
       - 8080

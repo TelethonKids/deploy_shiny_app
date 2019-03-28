@@ -1,0 +1,21 @@
+proxy:
+  title: Telethon Kids Institute Shiny Apps
+  hide-navbar: false
+  landing-page: /
+  heartbeat-rate: 10000
+  heartbeat-timeout: 600000
+  port: 8080
+  docker:
+    internal-networking: true
+  specs:
+  - id: shiny_app
+    display-name: New Shiny App
+    description: The default app when initiating a new shiny app via. RStudio
+    container-cmd: ["R", "-e", "shiny::runApp('/root/app')"]
+    container-image: telethonkids/new_shiny_app
+    container-network: tki-net
+    container-env:
+      user: "shiny"
+      environment:
+        - APPLICATION_LOGS_TO_STDOUT=false
+  usage-stats-url: http://influxdb:8086/write?db=shinyproxy_usage

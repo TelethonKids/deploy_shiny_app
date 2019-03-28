@@ -1,8 +1,6 @@
 Telethon Kids Institute ShinyProxy Docker Template
 ================
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 ### Docker Ubuntu Server Installation/Set-up
 
 1.  Docker CE for Ubuntu installation:
@@ -35,13 +33,18 @@ Telethon Kids Institute ShinyProxy Docker Template
 
 ### HTTPS encryption
 
-HTTPS encryption is enabled by default, which will requrie SSL
-certificates to be created. SSL certificates can be generated following
-these instructions by Let’s Encrypt <https://letsencrypt.org/>
+[These instructions](https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71)
+were used to set up a secure HTTPS connection with Certbot SSL certificates.
+Also see [here](https://github.com/wmnnd/nginx-certbot).
 
-The `*.crt` and `*.key` should be put into the
-`nginx/certs/example.com/` directory; change “example.com” to what is
-relevant for your site.
+This will not work out of the box, the NGINX configuration file will need to be
+updated with your domain name (which is required) at the indicated places in
+`nginx.conf`. `init-letsencrypt.sh` also needs to be configured with your domain
+names(s) and email address.
 
-If HTTPS encription is not required then modifications can be made to
-`nginx.conf` where indicated.
+The following commands will need to be run on the host machine in order to obtain
+the first valid certificates: first run `chmod +x init-letsencrypt.sh` then
+`sudo ./init-letsencrypt.sh`.
+
+If HTTPS security is not wanted then you will need to remove the indicated chunks
+of code in `nginx.conf`.
