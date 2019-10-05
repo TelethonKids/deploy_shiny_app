@@ -44,7 +44,7 @@ names(s) and email address.
 
 The following commands will need to be run on the host machine in order to obtain
 the first valid certificates: first run `chmod +x init-letsencrypt.sh` then
-`sudo ./init-letsencrypt.sh`.
+`./init-letsencrypt.sh`.
 
 If HTTPS security is not wanted then you will need to remove the indicated chunks
 of code in `nginx.conf`.
