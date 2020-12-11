@@ -19,3 +19,7 @@ proxy:
       environment:
         - APPLICATION_LOGS_TO_STDOUT=false
   usage-stats-url: http://influxdb:8086/write?db=shinyproxy_usage
+
+server:
+  useForwardHeaders: true
+
