@@ -1,6 +1,6 @@
 FROM rocker/shiny:3.5.1
 
-RUN apt-get update && apt-get install libcurl4-openssl-dev libv8-3.14-dev -y &&\
+RUN apt-get update && apt-get install libcurl4-openssl-dev libnode-dev -y &&\
     mkdir -p /var/lib/shiny-server/bookmarks/shiny
 
 # Download and install library
